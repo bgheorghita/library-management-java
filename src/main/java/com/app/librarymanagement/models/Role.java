@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Role extends BaseEntity {
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 }
