@@ -18,7 +18,7 @@ public class Book extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Genre genre;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "books_authors",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
