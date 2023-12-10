@@ -2,6 +2,7 @@ package com.app.librarymanagement.services.impl;
 
 import com.app.librarymanagement.models.Role;
 import com.app.librarymanagement.models.User;
+import com.app.librarymanagement.repositories.RoleRepository;
 import com.app.librarymanagement.repositories.UserRepository;
 import com.app.librarymanagement.services.AuthService;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private RoleRepository roleRepository;
 
     @Override
     public void register(String username, String password) {
@@ -24,8 +26,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String encodedPassword = passwordEncoder.encode(password);
-        Role userRole = new Role();
-        userRole.setName("ROLE_USER");
+        Role userRole = roleRepository.findByName("ROLE_USER");
+        if(userRole == null) {
+            userRole = new Role();
+            userRole.setName("ROLE_USER");
+        }
 
         User newUser = new User();
         newUser.setUsername(username);
