@@ -30,7 +30,7 @@ public class User extends BaseEntity implements UserDetails {
     )
     private List<Address> address;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false),
