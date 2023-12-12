@@ -2,6 +2,12 @@ package com.app.librarymanagement.controllers;
 
 import com.app.librarymanagement.models.Book;
 import com.app.librarymanagement.services.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +22,12 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
+    @Operation(summary = "Add a new book")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Book added successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class))),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+    })
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
@@ -23,6 +35,13 @@ public class BookController {
         return new ResponseEntity<>(addedBook, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Update a book by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Book updated successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class))),
+            @ApiResponse(responseCode = "404", description = "Book not found", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+    })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
@@ -34,12 +53,21 @@ public class BookController {
         }
     }
 
+    @Operation(summary = "Get all books")
+    @ApiResponse(responseCode = "200", description = "List of all books",
+            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Book.class))))
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
         List<Book> books = bookService.getAllBooks();
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get a book by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the book",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class))),
+            @ApiResponse(responseCode = "404", description = "Book not found", content = @Content),
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
         Book book = bookService.getBookById(id);
