@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BorrowController {
     private final BorrowService borrowingService;
 
-    // Constructor with Autowiring
     @PostMapping()
     public ResponseEntity<BorrowTransaction> borrowBook(@RequestParam Long userId, @RequestParam Long inventoryId) {
         BorrowTransaction transaction = borrowingService.borrowBook(userId, inventoryId);
@@ -24,8 +23,8 @@ public class BorrowController {
     }
 
     @PostMapping("/return")
-    public ResponseEntity<BorrowTransaction> returnBook(@RequestParam Long userId, @RequestParam Long inventoryId) {
-        BorrowTransaction transaction = borrowingService.returnBook(userId, inventoryId);
+    public ResponseEntity<BorrowTransaction> returnBook(@RequestParam Long userId, @RequestParam Long bookId) {
+        BorrowTransaction transaction = borrowingService.returnBook(userId, bookId);
         return ResponseEntity.ok(transaction);
     }
 }

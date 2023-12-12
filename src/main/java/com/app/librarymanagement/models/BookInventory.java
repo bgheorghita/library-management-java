@@ -15,7 +15,4 @@ public class BookInventory extends BaseEntity {
 
     @Column(name = "units", nullable = false)
     private Integer units;
-
-    @Column(name = "available_units", nullable = false)
-    private Integer availableUnits; // Available copies for borrowing
 }

@@ -50,8 +50,8 @@ public class BookInventoryServiceImpl implements BookInventoryService {
 
         if(unitsToAdd != null && unitsToAdd > 0) {
             BookInventory bookInventory = optionalBookInventory.get();
-            bookInventory.setAvailableUnits(bookInventory.getAvailableUnits() + unitsToAdd);
-            return bookInventoryRepository.save(bookInventory);
+            bookInventory.setUnits(bookInventory.getUnits() + unitsToAdd);
+            return bookInventory;
         } else {
             throw new RuntimeException("Units to add must be a positive number.");
         }
@@ -83,20 +83,21 @@ public class BookInventoryServiceImpl implements BookInventoryService {
     @Override
     public BookInventory borrowBook(Long inventoryId) {
         return bookInventoryRepository.findById(inventoryId).map(inventory -> {
-            if (inventory.getAvailableUnits() > 0) {
-                inventory.setAvailableUnits(inventory.getAvailableUnits() - 1);
+            if (inventory.getUnits() > 0) {
+                inventory.setUnits(inventory.getUnits() - 1);
                 return bookInventoryRepository.save(inventory);
             } else {
                 throw new IllegalStateException("No available units to borrow.");
             }
         }).orElseThrow(() -> new IllegalStateException("Inventory not found."));
     }
-
     @Override
-    public BookInventory returnBook(Long inventoryId) {
-        return bookInventoryRepository.findById(inventoryId).map(inventory -> {
-            inventory.setAvailableUnits(inventory.getAvailableUnits() + 1);
-            return bookInventoryRepository.save(inventory);
-        }).orElseThrow(() -> new IllegalStateException("Inventory not found."));
+    public BookInventory returnBook(Long bookId) {
+        BookInventory inventory = bookInventoryRepository.findByBookId(bookId)
+                .orElseThrow(() -> new IllegalStateException("Inventory for the given book not found."));
+
+        inventory.setUnits(inventory.getUnits() + 1);
+        return bookInventoryRepository.save(inventory);
     }
+
 }

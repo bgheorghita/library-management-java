@@ -13,11 +13,12 @@ import java.time.LocalDateTime;
 public class BorrowTransaction extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "book_inventory_id", nullable = false)
-    private BookInventory bookInventory;
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "borrow_date", nullable = false)
     private LocalDateTime borrowDate;
