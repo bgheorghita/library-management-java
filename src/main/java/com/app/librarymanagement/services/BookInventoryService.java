@@ -12,4 +12,8 @@ public interface BookInventoryService {
     BookInventory addUnitsToInventory(Long inventoryId, Integer unitsToAdd);
     BookInventory subtractUnitsFromInventory(Long inventoryId, Integer unitsToSubtract);
     List<BookInventory> findAll();
+
+    BookInventory borrowBook(Long inventoryId);
+
+    BookInventory returnBook(Long inventoryId);
 }
