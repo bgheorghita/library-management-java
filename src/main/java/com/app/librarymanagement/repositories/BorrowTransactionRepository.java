@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface BorrowTransactionRepository extends JpaRepository<BorrowTransaction, Long> {
     List<BorrowTransaction> findByUserIdAndBook_Id(Long userId, Long bookId);
+
 }
 
